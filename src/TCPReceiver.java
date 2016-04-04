@@ -20,13 +20,13 @@ public class TCPReceiver implements Runnable{
     InputStream theInstream;
     OutputStream theOutstream;
     
-    public TCPReceiver(int port) throws IOException
+    public TCPReceiver(int port) throws IOException // when port number is the only input parameter
     {
 	// Init stuff
-	listener = new ServerSocket(port);
-	buffer = new byte[8192];
+	listener = new ServerSocket(port); //establish new server socket at this port
+	buffer = new byte[8192]; 
 	System.out.println(" -- Ready to receive information on port: "+port);
-	s = listener.accept();
+	s = listener.accept(); // ServerSocket.accept() returns 
 	
 	theInstream = s.getInputStream();
 	theOutstream = s.getOutputStream();
