@@ -20,7 +20,8 @@ public class TCPReceiver implements Runnable{
     InputStream theInstream;
     OutputStream theOutstream;
     
-    public TCPReceiver(int port) throws IOException // when port number is the only input parameter
+    public TCPReceiver(int port) throws IOException 
+    // when port number is the only input parameter
     {
 	// Init stuff
 	listener = new ServerSocket(port); //establish new server socket at this port
@@ -72,7 +73,7 @@ public class TCPReceiver implements Runnable{
 	bytesToReceive = new Integer(t.nextToken()).intValue();
 //	System.out.print(s.getLocalPort()+"---"+bytesToReceive+"-----"+largeBuffer.capacity());
 //	dst = new byte[(int)bytesToReceive];
-	startPointer = new Long(t.nextToken()).longValue();
+	startPointer = new Long(t.nextToken()).longValue(); // the start pointer is never used ???
 	
 //	System.out.println("  -- The file will be saved as: "+filename);
 //	System.out.println("  -- Expecting to receive: "+bytesToReceive+" bytes");
@@ -108,7 +109,7 @@ public class TCPReceiver implements Runnable{
 	length = theInstream.read(tmp);
 	largeBuffer.put(tmp);
 
-	s.close();
+	s.close(); // close after the expected recieving bytes are all recieved
 //	System.out.println(largeBuffer.capacity()+"---"+dst.length);
 //	largeBuffer.flip();
 //	largeBuffer.get(dst, 0, dst.length);
