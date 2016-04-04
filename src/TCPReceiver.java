@@ -26,23 +26,23 @@ public class TCPReceiver implements Runnable{
 	listener = new ServerSocket(port); //establish new server socket at this port
 	buffer = new byte[8192]; 
 	System.out.println(" -- Ready to receive information on port: "+port);
-	s = listener.accept(); // ServerSocket.accept() returns 
+	s = listener.accept(); // ServerSocket.accept() returns when a client connection is received
 	
-	theInstream = s.getInputStream();
-	theOutstream = s.getOutputStream();
+	theInstream = s.getInputStream(); // contains filename
+	theOutstream = s.getOutputStream(); // -> what 
 	length = theInstream.read(buffer);
 	initString = "Recieved-"+new String(buffer, 0, length);
 	StringTokenizer t = new StringTokenizer(initString, "::");
-	filename = t.nextToken();
-	bytesToReceive = new Integer(t.nextToken()).intValue();
-	theOutstream.write((new String("GOT_IT")).getBytes());
-	System.out.println("dalian");
+	filename = t.nextToken(); // filename followed by "::"
+	bytesToReceive = new Integer(t.nextToken()).intValue(); // also contains total bytes to recieve
+	theOutstream.write((new String("GOT_IT")).getBytes()); // change the content of the socket, hence the sender will recieve this output message
+	//System.out.println("dalian");
     }
 
     public TCPReceiver(int port, ByteBuffer lb) throws IOException
     {
 	// Init stuff
-    this.largeBuffer = lb;
+    this.largeBuffer = lb;   // -> this.largeBuffer of the port will point to the ByteBuffer allocated
 	listener = new ServerSocket(port);
 	buffer = new byte[8192];
 	
@@ -52,7 +52,7 @@ public class TCPReceiver implements Runnable{
     }
     
     public void close() throws IOException {
-    	s.close();
+    	s.close(); // stop the socket
     }
     
 	public void receive() throws IOException {
