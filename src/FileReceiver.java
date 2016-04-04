@@ -6,33 +6,33 @@ public class FileReceiver{
 
     public static void main(String[] args) throws Exception{
 	int portNumber = 0;
-    List<Thread> ls = new ArrayList<Thread>();
-    List<ByteBuffer> buffer = new ArrayList<>();
+    List<Thread> ls = new ArrayList<Thread>();// ls is the arraylist of threads -> one member for one port
+    List<ByteBuffer> buffer = new ArrayList<>(); // buffer is the arraylist of recieved contents -> one member for one port
 
 	// Checking the arguments
 	if (args.length != 2) printError("Wrong number of arguments");
 	
 	if (!args[0].equals("tcp") && !args[0].equals("udp")) printError("Unrecognized protocol: "+args[0]);
 
-	portNumber = Integer.parseInt(args[1]);
+	portNumber = Integer.parseInt(args[1]); // first parameter is tcp/udp, second is number of port
 	
-	int[] thePorts = new int[portNumber];
+	int[] thePorts = new int[portNumber]; 
 	
-	TCPReceiver sh = new TCPReceiver(8080);
-	String filename = sh.filename;
-	long filesize = sh.bytesToReceive;
-	sh.close();
+	TCPReceiver sh = new TCPReceiver(8080); //TCP Reciever return sh: sh contains member:
+	String filename = sh.filename; // ->filename
+	long filesize = sh.bytesToReceive; // ->the sequence of bytes recived ??
+	sh.close(); // -> ??
 	
-	long start = 0L;
+	long start = 0L; 
 	
 	for (int i=0; i<portNumber; i++) {
-		thePorts[i] = 8081+i;
-		buffer.add(ByteBuffer.allocate((int)(filesize/portNumber+8192)));
+		thePorts[i] = 8081+i; // thePorts -> ID of the ports
+		buffer.add(ByteBuffer.allocate((int)(filesize/portNumber+8192))); // one memeber for the content recieved by one port
 	}
 	
 	Thread t = null;
 	for (int i=0; i<portNumber; i++) {
-		t = new Thread(new TCPReceiver(thePorts[i], buffer.get(i)));
+		t = new Thread(new TCPReceiver(thePorts[i], buffer.get(i))); // one new thread for one port
 		t.start();
 		ls.add(t);
 		start = System.nanoTime();
@@ -40,15 +40,15 @@ public class FileReceiver{
 	
 	try {  
         for(Thread thread : ls) 
-            thread.join(); 
+            thread.join();  // -> "join" method without parameter ?
     } catch (InterruptedException e) {  
         e.printStackTrace();  
     }
 	
-	FileOutputStream out = new FileOutputStream(filename);
-	byte[] bt = new byte[8192];
+	FileOutputStream out = new FileOutputStream(filename); // filename obtained from the return of TCPReceiver(8080);
+	byte[] bt = new byte[8192]; // bt for one packet
 	for (ByteBuffer b : buffer) {
-		b.flip();
+		b.flip(); 
 		while (b.position()<b.limit()) {
 			b.get(bt, 0, (b.limit()-b.position()) < bt.length ? (b.limit()-b.position()) : bt.length);
 			out.write(bt);
