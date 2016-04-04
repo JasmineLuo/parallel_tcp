@@ -48,14 +48,14 @@ public class FileReceiver{ ////
 	FileOutputStream out = new FileOutputStream(filename); // filename recieved from sender
 	byte[] bt = new byte[8192]; // bt -> buffer for one packet
 	for (ByteBuffer b : buffer) {
-		b.flip();
-		while (b.position()<b.limit()) {
+		b.flip(); // in this command, limit is set to current write position, read position is set to 0...
+		while (b.position()<b.limit()) { // ...to ensure the position READ start from zero to limit
 			b.get(bt, 0, (b.limit()-b.position()) < bt.length ? (b.limit()-b.position()) : bt.length);
-			out.write(bt);
+			out.write(bt); // write the result to output packet by packet /// ------? but why?
 		}
-		System.out.println("Thread done!");
+		System.out.println("Thread done!"); // Means the content of port receive is written to output file
 	}
-	out.close();
+	out.close(); // close the file
 	long end = System.nanoTime();
 	System.out.println((double)(start-end)/(long)1000000000);
     }
